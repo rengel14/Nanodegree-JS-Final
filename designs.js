@@ -1,29 +1,30 @@
-// Select color input
-// Select size input
-function setColor(event)
+function setColor(event) //sets the color of the clicked element to the color choosen if it has a "TD" node name
 {
     if(event.target.nodeName == "TD")
     {
         event.target.style.backgroundColor = document.getElementById("colorPicker").value
-        console.log(document.getElementById("colorPicker").value)
     }
-    
 }
-// When size is submitted by the user, call makeGrid()
+
 function makeGrid() {
     var thisUrl = window.location.href;
-    hIndex = thisUrl.indexOf("?height=") + "?height=".length;
-    andIndex = thisUrl.indexOf("&", hIndex);
-    wIndex = thisUrl.indexOf("width=") + "width=".length;
-    endIndex = thisUrl.length;
-    height = thisUrl.substring(hIndex, andIndex);
-    width = thisUrl.substring(wIndex, endIndex);
     const hBox = document.querySelector('#inputHeight');
     const wBox = document.querySelector('#inputWidth');
-    hBox.value = height;
-    wBox.value = width;
+    var height = 1;
+    var width = 1;
+    if(thisUrl.includes("?")) //checks if user has already submitted values. If so, parses URL for those and sets height and width values to generate table. If not, keeps height and width set to 1
+    {
+        hIndex = thisUrl.indexOf("?height=") + "?height=".length;
+        andIndex = thisUrl.indexOf("&", hIndex);
+        wIndex = thisUrl.indexOf("width=") + "width=".length;
+        endIndex = thisUrl.length;
+        height = thisUrl.substring(hIndex, andIndex);
+        width = thisUrl.substring(wIndex, endIndex);
+        hBox.value = height;
+        wBox.value = width;
+    }
     const table = document.querySelector('#pixelCanvas');
-    for(i=0; i<height; i++)
+    for(i=0; i<height; i++)//generates table
     {
         var tr = document.createElement('tr');
         table.appendChild(tr);
@@ -33,6 +34,6 @@ function makeGrid() {
             tr.appendChild(td);
         }
     }
-    document.querySelector('#pixelCanvas').addEventListener('click', setColor);
 }
-document.querySelector('#sizePicker').addEventListener("submit", makeGrid());
+document.querySelector('#sizePicker').addEventListener("submit", makeGrid()); // When size is submitted by the user, call makeGrid()
+document.querySelector('#pixelCanvas').addEventListener('click', setColor); //adds event listener for setting color
