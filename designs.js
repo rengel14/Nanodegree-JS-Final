@@ -1,4 +1,4 @@
-function setColor(event) //sets the color of the clicked element to the color choosen if it has a "TD" node name
+function SetColor(event) //sets the color of the clicked element to the color choosen if it has a "TD" node name
 {
     if(event.target.nodeName == "TD")
     {
@@ -6,27 +6,31 @@ function setColor(event) //sets the color of the clicked element to the color ch
     }
 }
 
-function makeGrid() {
+function MakeGrid(heightBox, widthBox) //gets values for the height and width of grid from the URL/filepath, then generates grid via adding "td" and "tr" elements
+{
     var thisUrl = window.location.href;
-    const hBox = document.querySelector('#inputHeight');
-    const wBox = document.querySelector('#inputWidth');
-    var height = 1;
-    var width = 1;
+    var height;
+    var width;
     if(thisUrl.includes("?")) //checks if user has already submitted values. If so, parses URL for those and sets height and width values to generate table. If not, keeps height and width set to 1
     {
-        hIndex = thisUrl.indexOf("?height=") + "?height=".length;
-        andIndex = thisUrl.indexOf("&", hIndex);
-        wIndex = thisUrl.indexOf("width=") + "width=".length;
+        heightIndex = thisUrl.indexOf("?height=") + "?height=".length;
+        andIndex = thisUrl.indexOf("&", heightIndex);
+        widthIndex = thisUrl.indexOf("width=") + "width=".length;
         endIndex = thisUrl.length;
-        height = thisUrl.substring(hIndex, andIndex);
-        width = thisUrl.substring(wIndex, endIndex);
-        hBox.value = height;
-        wBox.value = width;
+        height = thisUrl.substring(heightIndex, andIndex);
+        width = thisUrl.substring(widthIndex, endIndex);
+        heightBox.value = height;
+        widthBox.value = width;
+    }
+    else
+    {
+        width = 1
+        height = 1
     }
     const table = document.querySelector('#pixelCanvas');
     for(i=0; i<height; i++)//generates table
     {
-        var tr = document.createElement('tr');
+        var tr = document.createElement('TR');
         table.appendChild(tr);
         for(j=0; j<width; j++)
         {
@@ -35,5 +39,13 @@ function makeGrid() {
         }
     }
 }
-document.querySelector('#sizePicker').addEventListener("submit", makeGrid()); // When size is submitted by the user, call makeGrid()
-document.querySelector('#pixelCanvas').addEventListener('click', setColor); //adds event listener for setting color
+
+function Initialize() //gets elements for event listener functions, and sets up event listeners
+{
+    heightBox = document.querySelector('#inputHeight'); 
+    widthBox = document.querySelector('#inputWidth');
+    document.querySelector('#sizePicker').addEventListener("submit", MakeGrid(heightBox, widthBox));// When size is submitted by the user, call makeGrid()
+    document.querySelector('#pixelCanvas').addEventListener('click', SetColor); //adds event listener for setting color
+}
+
+Initialize()
